@@ -55,11 +55,19 @@ export default {
       ).addTo(mymap);
 
     trip.destinations.forEach(dest => {
-        L.marker([dest.n, dest.e]).addTo(mymap);
+        const marker = L.marker([dest.n, dest.e]).addTo(mymap);
+        marker.bindPopup(`<div class="card-body">
+              <h5 class="card-title">${dest.name}</h5>
+              <p class="card-text">${dest.date}</p>
+              <a class="card-link" href="#/destination/${dest.id}">Open</a>
+          </div>`).openPopup();
+      
     });
-
       this.loaded = true;
     },
+    onEventClick(id){
+      console.log(id);
+    }
   },
   mounted(){
       this.setupTile();
