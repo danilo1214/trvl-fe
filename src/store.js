@@ -19,14 +19,20 @@ export default (Vue) => {
                         {
                             id: 0,
                             name: "Prague",
-                            date: new Date("11-20-2020"),
+                            dateFrom: new Date("11-20-2020"),
+                            dateTo: new Date("11-24-2020"),
+                            img: "https://www.planetware.com/wpimages/2019/06/czech-republic-prague-itineraries-for-travelers-one-day-itinerary-old-town-square.jpg",
                             n: 50.0755,
+                            budget: 50,
                             e: 14.4378
                         },
                         {
                             id: 1,
                             name: "Berlin",
-                            date: new Date("11-24-2020"),
+                            budget: 60,
+                            img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Aerial_view_of_Berlin_%2832881394137%29.jpg",
+                            dateFrom: new Date("11-24-2020"),
+                            dateTo: new Date("11-27-2020"),
                             n: 52.5200,
                             e: 13.4050
                         }

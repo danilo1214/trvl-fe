@@ -3,10 +3,10 @@
 
       <div v-for="trip in trips" :key="trip.id" class="card" style="width: 18rem;">
           <div class="card-body">
-              <h5 class="card-title">{{trip.title}}</h5>
+              <h5 class="card-title">{{trip.name}}</h5>
               <p class="card-text">{{trip.description}}</p>
-              <a @click="viewDestinations(trip)" class="card-link">View Destinations</a>
-              <a @click="onEdit(trip)"  class="card-link">Edit</a>
+              <a :href="`#/trip/${trip.id}`" class="card-link">View Destinations</a>
+              <a :href="`#/trips/${trip.id}`"  class="card-link">Edit</a>
           </div>
       </div>
   </div>
