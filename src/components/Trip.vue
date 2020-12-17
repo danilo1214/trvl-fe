@@ -1,6 +1,18 @@
 <template>
-  <div id="container" :v-loading="!loaded">
-    <div id="mapContainer" style="height: 500px"></div>
+  <div class="map-container" id="container" :v-loading="!loaded">
+    <div id="mapContainer" class="map" >
+     
+    </div>
+ <button
+ id="newTripButton"
+        type="button"
+        class="btn btn-light"
+        data-bs-toggle="modal"
+        data-bs-target="#new-trip"
+      >
+        ➕
+      </button>
+    <new-trip />
   </div>
 </template>
 
@@ -12,8 +24,10 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import * as L from "leaflet";
 import "leaflet-defaulticon-compatibility";
+import NewTrip from "./NewTrip.vue";
 
 export default {
+  components: { NewTrip },
   name: "Trip",
   data() {
     return {
@@ -57,7 +71,6 @@ export default {
         const dateFrom = moment(dest.dateFrom).format("DD-MM-YYYY");
         const dateTo = moment(dest.dateTo).format("DD-MM-YYYY");
 
-
         const marker = L.marker([dest.n, dest.e], {
           title: dest.name,
         }).addTo(mymap);
@@ -90,4 +103,23 @@ export default {
 </script>
 
 <style>
+
+#newTripButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px;
+  z-index: 400;
+}
+.map-container {
+  padding: 0;
+}
+.map {
+  height: 100vh;
+  width: 100vw;
+
+  max-height: 100%;
+  max-width: 100%;
+}
+
 </style>

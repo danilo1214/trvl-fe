@@ -13,7 +13,7 @@
     </ul>
   </div>
 </nav>
-    <div class="container">
+    <div class="main">
       <router-view />
     </div>
   </div>
@@ -29,3 +29,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
