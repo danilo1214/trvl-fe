@@ -3,16 +3,16 @@
     <div id="mapContainer" class="map" >
      
     </div>
- <button
- id="newTripButton"
-        type="button"
-        class="btn btn-light"
-        data-bs-toggle="modal"
-        data-bs-target="#new-trip"
+ <el-button
+        id="newTripButton"
+        type="primary"
+        circle
+        small
+        @click="addNew"
       >
-        ➕
-      </button>
-    <new-trip />
+        <span class="fas fa-plus"></span>
+ </el-button>
+    <router-view />
   </div>
 </template>
 
@@ -24,21 +24,23 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import * as L from "leaflet";
 import "leaflet-defaulticon-compatibility";
-import NewTrip from "./NewTrip.vue";
 
 export default {
-  components: { NewTrip },
   name: "Trip",
   data() {
     return {
       center: [37, 7749, -122, 4194],
       loaded: false,
+      map: null
     };
   },
   computed: {
     ...mapGetters(["getTrip"]),
+    id(){
+      return this.$route.params.id;
+    },
     trip() {
-      const { id } = this.$route.params;
+      const { id } = this;
       return this.getTrip(id)[0];
     },
     destinations() {
@@ -46,6 +48,13 @@ export default {
     },
   },
   methods: {
+    addNew(){
+      const {id} = this;
+      this.$router.replace({
+        name: "new-destination",
+        id
+      })
+    },
     setupTile() {
       this.loaded = false;
 
@@ -53,6 +62,7 @@ export default {
 
       const mymap = L.map("mapContainer").setView([51.505, -0.09], 13);
 
+      this.map = mymap;
       L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
         {
@@ -99,6 +109,15 @@ export default {
   mounted() {
     this.setupTile();
   },
+  watch:{
+    $route(route){
+      console.log("new tile");
+      if(route.name === "trip"){
+        if(this.map) this.map.remove();
+        this.setupTile();
+      }
+    }
+  }
 };
 </script>
 

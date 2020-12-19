@@ -1,30 +1,90 @@
 <template>
-  <div class="modal fade" id="new-trip" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Destination</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <el-dialog
+    custom-class="dialog-fade-enter-active"
+    :visible="true"
+    :before-close="closeModal"
+  >
+    <form>
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input v-model="data.name" type="text" class="form-control" />
       </div>
-      <div class="modal-body">
-        ...
+      <label class="form-label">Dates</label>
+      <div class="mb-3">
+        <el-date-picker
+          label="Date From"
+          v-model="data.dateFrom"
+          type="date"
+          placeholder="Date From"
+        >
+        </el-date-picker>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <div class="mb-3">
+        <el-date-picker
+          label="Date To"
+          v-model="data.dateTo"
+          type="date"
+          placeholder="Date To"
+        >
+        </el-date-picker>
       </div>
-    </div>
-  </div>
-</div>
+      <label class="form-label">N coord</label>
 
+      <div class="mb-3">
+        <el-slider v-model="data.n"></el-slider>
+      </div>
+      <label class="form-label">E coord</label>
+
+      <div class="mb-3">
+        <el-slider v-model="data.e"></el-slider>
+      </div>
+      <label class="form-label">Budget</label>
+
+      <div class="mb-3">
+        <el-slider v-model="data.budget"></el-slider>
+      </div>
+
+      
+
+      <button  class="btn btn-primary" @click="submit">Submit</button>
+    </form>
+  </el-dialog>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
-    name: "NewTrip"
-}
+  name: "NewTrip",
+  data() {
+    return {
+      data: {
+        name: "",
+        n: 0,
+        e: 0,
+        img: "",
+        budget: 0,
+        dateFrom: null,
+        dateTo: null,
+      },
+    };
+  },
+  computed: {
+    id(){
+      return this.$route.params.id;
+    }
+  },
+  methods: {
+    ...mapActions(["createDestination"]),
+    closeModal() {
+      this.$router.push(".");
+    },
+    submit(){
+      const {data, id} = this;
+      this.createDestination({data, id});
+    }
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -64,6 +64,15 @@ export default (Vue) => {
             login({commit}, {token}) {
                 commit("APP_LOGIN", token);
                 localStorage.setItem("trvl-token", token);
+            },
+            createDestination: ({state}, {data, id}) => {
+                const trip = state.trips.filter(trip=>{
+                    console.log(trip.id, id, trip.id === id);
+                    return trip.id === id;
+                })[0];
+                
+
+                trip.destinations.push(data);
             }
         }
     });
