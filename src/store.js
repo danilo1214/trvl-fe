@@ -43,6 +43,9 @@ export default (Vue) => {
         mutations: {
             APP_LOGIN(state, value) {
                 state.token = value;
+            },
+            CREATE_TRIP(state, value){
+                state.trips.push(value);
             }
         },
         getters: {
@@ -53,7 +56,7 @@ export default (Vue) => {
             getTrip: (state) => id => {
                 return state.trips.filter(trip=>{
                     console.log(trip.id, id, trip.id === id);
-                    return trip.id === id;
+                    return Number(trip.id) === Number(id);
                 });
             }
         },
@@ -73,8 +76,14 @@ export default (Vue) => {
                 
 
                 trip.destinations.push(data);
+            },
+            createTrip: ({commit, state}, {data}) => {
+                const id = state.trips.length;
+    
+                commit("CREATE_TRIP", {...data, id, destinations: []});
             }
-        }
+        },
+        
     });
 };
 

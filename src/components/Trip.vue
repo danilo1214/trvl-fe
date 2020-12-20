@@ -4,7 +4,7 @@
      
     </div>
  <el-button
-        id="newTripButton"
+        id="newDestinationButton"
         type="primary"
         circle
         small
@@ -123,7 +123,7 @@ export default {
 
 <style>
 
-#newTripButton {
+#newDestinationButton {
   position: absolute;
   bottom: 20px;
   right: 20px;
