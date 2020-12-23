@@ -26,6 +26,21 @@ export default {
     return {
       
     }
+  },
+  methods: {
+    init(){
+      if(!this.$route.name){
+        this.$router.replace({name: "trips"});
+      }
+    }
+  },
+  created(){
+    this.init();
+  },
+  watch: {
+    $route(){
+      this.init()
+    }
   }
 }
 </script>
