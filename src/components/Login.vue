@@ -13,6 +13,7 @@
 </template>
 <script>
 import axios from "axios";
+import { mapActions } from 'vuex';
 export default {
   name: "Login",
   data() {
@@ -24,8 +25,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setToken"]),
     onGoogleSignInSuccess(resp) {
       const token = resp.xc.access_token;
+      this.setToken({token});
       axios
         .post("http://127.0.0.1:8000/auth/google/", {
           access_token: token,

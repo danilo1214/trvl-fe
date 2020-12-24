@@ -4,7 +4,7 @@
     :visible="true"
     :before-close="closeModal"
   >
-    <form>
+    <div>
       <div class="mb-3">
         <label class="form-label">Name</label>
         <input v-model="data.name" type="text" class="form-control" />
@@ -16,7 +16,7 @@
       </div>
 
       <button class="btn btn-primary" @click="submit">Save</button>
-    </form>
+    </div>
   </el-dialog>
 </template>
 

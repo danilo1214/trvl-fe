@@ -4,8 +4,8 @@
       <div class="card-body">
         <h5 class="card-title">{{ trip.name }}</h5>
         <p class="card-text">{{ trip.description }}</p>
-        <a :href="`#/trip/${trip.id}`" class="card-link">View Destinations</a>
-        <a :href="`#/trips/${trip.id}`" class="card-link">Edit</a>
+        <a :href="`#/trip/${trip.trip_id}`" class="card-link">View Destinations</a>
+        <a :href="`#/trips/${trip.trip_id}`" class="card-link">Edit</a>
       </div>
     </div>
 

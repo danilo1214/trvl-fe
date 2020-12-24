@@ -1,54 +1,35 @@
+import axios from "axios";
 import Vuex from "vuex";
 
-
+const endpoint = "http://127.0.0.1:8000/api"
 export default (Vue) => {
     Vue.use(Vuex);
 
     return new Vuex.Store({
         state: {
             token: null,
-            trips: [
-                {
-                    id: "0",
-                    name: "Central Europe Tour",
-                    duration: "10/12/2020 - 22/12/2020",
-                    description: "A short trip across the central European cities.",
-                    budget: 500,
-                    cost: 400,
-                    destinations: [
-                        {
-                            id: 0,
-                            name: "Prague",
-                            dateFrom: new Date("11-20-2020"),
-                            dateTo: new Date("11-24-2020"),
-                            img: "https://www.planetware.com/wpimages/2019/06/czech-republic-prague-itineraries-for-travelers-one-day-itinerary-old-town-square.jpg",
-                            n: 50.0755,
-                            budget: 50,
-                            e: 14.4378
-                        },
-                        {
-                            id: 1,
-                            name: "Berlin",
-                            budget: 60,
-                            img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Aerial_view_of_Berlin_%2832881394137%29.jpg",
-                            dateFrom: new Date("11-24-2020"),
-                            dateTo: new Date("11-27-2020"),
-                            n: 52.5200,
-                            e: 13.4050
-                        }
-                    ]
-                }
-            ]
+            trips: [],
+            user: {},
+            access_token: null
         },
         mutations: {
+            SET_TRIPS(state, data){
+                state.trips = data;
+            },
             APP_LOGIN(state, value) {
                 state.token = value;
             },
             CREATE_TRIP(state, value){
                 state.trips.push(value);
+            },
+            SET_TOKEN(state, token){
+                state.access_token = token;
             }
         },
         getters: {
+            token: (state) => {
+                return state.access_token;
+            },
             trips: (state) => {
                 console.log(state);
                 return state.trips
@@ -68,6 +49,18 @@ export default (Vue) => {
                 commit("APP_LOGIN", token);
                 localStorage.setItem("trvl-token", token);
             },
+            async loadTrips({commit, state}) {
+                const {access_token} = state;
+                await axios.get(`${endpoint}/trip`, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response=>{
+                    console.log(response);
+                    commit("SET_TRIPS", response.data);
+                });
+            },
             createDestination: ({state}, {data, id}) => {
                 const trip = state.trips.filter(trip=>{
                     console.log(trip.id, id, trip.id === id);
@@ -77,10 +70,37 @@ export default (Vue) => {
 
                 trip.destinations.push(data);
             },
-            createTrip: ({commit, state}, {data}) => {
-                const id = state.trips.length;
-    
-                commit("CREATE_TRIP", {...data, id, destinations: []});
+            auth: async ({commit,state}) => {
+                const token = await localStorage.getItem("trvl-token");
+                commit("SET_TOKEN",token);
+                return axios
+                .post("http://127.0.0.1:8000/auth/google/", {
+                  access_token: token,
+                })
+                .then((resp) => {
+                  state.user = resp.data.user;
+                });
+            },
+            setToken: async ({commit}, {token}) => {
+                commit("SET_TOKEN", token);
+                localStorage.setItem("trvl-token", token);
+            },
+            createTrip: async ({state}, {data}) => {
+                const {access_token} = state;
+
+                await axios.post(`${endpoint}/trip`, {
+                    ...data,
+                    user_id: 4
+                }, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response=>{
+                    console.log(response);
+                }).catch(err=>{
+                    console.log(err);
+                });
             }
         },
         

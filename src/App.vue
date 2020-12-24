@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-loading="!loaded">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">TRVLAPP</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,24 +14,42 @@
   </div>
 </nav>
     <div class="main">
-      <router-view />
+      <router-view v-if="loaded" />
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'App',
   data () {
     return {
-      
+      loaded: true,
+      logged: false
     }
   },
   methods: {
-    init(){
-      if(!this.$route.name){
+    ...mapActions(["loadTrips", "auth", "setToken"]),
+    async init(){
+      this.loaded = false;
+      await this.auth().then(async ()=>{
+        this.logged = true;
+        await this.loadTrips();
+        if(!this.$route.name){
         this.$router.replace({name: "trips"});
       }
+      }).catch(err=>{
+        console.log(err);
+        this.setToken({token: null});
+        this.$router.replace({name: "login"});
+        this.logged = false;
+      });
+      this.loaded = true;
+
+      
+
+
     }
   },
   created(){
