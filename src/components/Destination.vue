@@ -18,7 +18,7 @@ export default {
         },
         destination(){
             const {id} = this;
-            return this.getDestination(id);
+            return this.getDestination(id)[0];
         }
     }
 }

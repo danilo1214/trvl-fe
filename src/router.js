@@ -3,6 +3,7 @@ import Login from "./components/Login.vue";
 import Trip from "./components/Trip.vue";
 import Trips from "./components/Trips.vue";
 import NewDestination from "./components/NewDestination.vue";
+import Destination from "./components/Destination.vue";
 import NewTrip from "./components/NewTrip.vue";
 
 
@@ -13,6 +14,11 @@ const routes = [
         name: "login",
         path: "/login",
         component: Login
+    },
+    {
+        name: "destination",
+        path: "/destination/:id",
+        component: Destination
     },
     {
         name: "trips",

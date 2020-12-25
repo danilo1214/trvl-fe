@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import moment from "moment";
 import "leaflet/dist/leaflet.css";
@@ -35,19 +35,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getTrip"]),
+    ...mapGetters(["getTrip", "destinations"]),
     id(){
       return this.$route.params.id;
     },
     trip() {
       const { id } = this;
       return this.getTrip(id)[0];
-    },
-    destinations() {
-      return this.trip.destinations;
-    },
+    }
   },
   methods: {
+    ...mapActions(["loadDestinations"]),
     addNew(){
       const {id} = this;
       this.$router.replace({
@@ -55,10 +53,11 @@ export default {
         id
       })
     },
-    setupTile() {
+    async setupTile() {
       this.loaded = false;
 
       const { trip } = this;
+      await this.loadDestinations({tripId: trip.trip_id});
 
       const mymap = L.map("mapContainer").setView([51.505, -0.09], 13);
 
@@ -76,10 +75,10 @@ export default {
             "pk.eyJ1IjoiZGFuaWxvMTIxNCIsImEiOiJja2lqN3Z6djAwMDU2MnRtamZxZHg0eDJhIn0.qMiqt7L6kKWyJFOiTZz5MA",
         }
       ).addTo(mymap);
-
-      trip.destinations.forEach((dest) => {
-        const dateFrom = moment(dest.dateFrom).format("DD-MM-YYYY");
-        const dateTo = moment(dest.dateTo).format("DD-MM-YYYY");
+      const {destinations} = this;
+      destinations.forEach((dest) => {
+        const dateFrom = moment(dest.date_from).format("DD-MM-YYYY");
+        const dateTo = moment(dest.date_to).format("DD-MM-YYYY");
 
         const marker = L.marker([dest.n, dest.e], {
           title: dest.name,
@@ -94,7 +93,7 @@ export default {
               <p class="card-text">To: ${dateTo}</p>
               <p class="card-text">Budget: <span class="text-primary">$${dest.budget}</span></p>
 
-              <a class="card-link" href="#/destination/${dest.id}">Open</a>
+              <a class="card-link" href="#/destination/${dest.destination_id}">Open</a>
           </div>
             </div>`
           )

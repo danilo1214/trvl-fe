@@ -9,11 +9,16 @@
         <label class="form-label">Name</label>
         <input v-model="data.name" type="text" class="form-control" />
       </div>
+
+      <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input v-model="data.country" type="text" class="form-control" />
+      </div>
       <label class="form-label">Dates</label>
       <div class="mb-3">
         <el-date-picker
           label="Date From"
-          v-model="data.dateFrom"
+          v-model="data.date_from"
           type="date"
           placeholder="Date From"
         >
@@ -22,7 +27,7 @@
       <div class="mb-3">
         <el-date-picker
           label="Date To"
-          v-model="data.dateTo"
+          v-model="data.date_to"
           type="date"
           placeholder="Date To"
         >
@@ -63,8 +68,11 @@ export default {
         e: 0,
         img: "",
         budget: 0,
-        dateFrom: null,
-        dateTo: null,
+        country: "",
+        postal_code: 1000,
+        date_from: null,
+        date_to: null,
+        country_code: "IDK"
       },
     };
   },
@@ -80,7 +88,7 @@ export default {
     },
     submit(){
       const {data, id} = this;
-      this.createDestination({data, id: Number(id)});
+      this.createDestination({data, tripId: Number(id)});
     }
   },
 };

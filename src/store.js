@@ -1,5 +1,6 @@
 import axios from "axios";
 import Vuex from "vuex";
+import moment from "moment";
 
 const endpoint = "http://127.0.0.1:8000/api"
 export default (Vue) => {
@@ -9,12 +10,16 @@ export default (Vue) => {
         state: {
             token: null,
             trips: [],
+            destinations: [],
             user: {},
             access_token: null
         },
         mutations: {
             SET_TRIPS(state, data){
                 state.trips = data;
+            },
+            SET_DESTINATIONS(state, data){
+                state.destinations = data;
             },
             APP_LOGIN(state, value) {
                 state.token = value;
@@ -31,13 +36,19 @@ export default (Vue) => {
                 return state.access_token;
             },
             trips: (state) => {
-                console.log(state);
                 return state.trips
+            },
+            destinations: (state) => {
+                return state.destinations
             },
             getTrip: (state) => id => {
                 return state.trips.filter(trip=>{
-                    console.log(trip.id, id, trip.id === id);
-                    return Number(trip.id) === Number(id);
+                    return Number(trip.trip_id) === Number(id);
+                });
+            },
+            getDestination: (state) => id => {
+                return state.destinations.filter(dest=>{
+                    return Number(dest.destination_id) === Number(id);
                 });
             }
         },
@@ -61,14 +72,38 @@ export default (Vue) => {
                     commit("SET_TRIPS", response.data);
                 });
             },
-            createDestination: ({state}, {data, id}) => {
-                const trip = state.trips.filter(trip=>{
-                    console.log(trip.id, id, trip.id === id);
-                    return trip.id === id;
-                })[0];
-                
+            loadDestinations: async ({state, commit}, {tripId}) =>{
+                const {access_token} = state;
+                await axios.get(`${endpoint}/dest/fk=${Number(tripId)}`, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response=>{
+                    console.log(response);
+                    commit("SET_DESTINATIONS", response.data);
+                });
+            },
+            createDestination: async ({state}, {data, tripId}) => {
+                const {access_token} = state;
+                const {date_from, date_to} = data;
 
-                trip.destinations.push(data);
+                data.date_from = moment(date_from).utc();
+                data.date_to = moment(date_to).utc();
+                console.log(tripId);
+                await axios.post(`${endpoint}/dest`, {
+                    ...data,
+                    trip_id: tripId
+                }, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response=>{
+                    console.log(response);
+                }).catch(err=>{
+                    console.log(err);
+                });
             },
             auth: async ({commit,state}) => {
                 const token = await localStorage.getItem("trvl-token");
