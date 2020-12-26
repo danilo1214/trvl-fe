@@ -11,86 +11,116 @@ export default (Vue) => {
             token: null,
             trips: [],
             destinations: [],
+            interests: [],
             user: {},
             access_token: null
         },
         mutations: {
-            SET_TRIPS(state, data){
+            SET_TRIPS(state, data) {
                 state.trips = data;
             },
-            SET_DESTINATIONS(state, data){
+            SET_DESTINATIONS(state, data) {
                 state.destinations = data;
             },
-            APP_LOGIN(state, value) {
-                state.token = value;
+            SET_INTERESTS(state, data) {
+                state.interests = data;
             },
-            CREATE_TRIP(state, value){
+            CREATE_TRIP(state, value) {
                 state.trips.push(value);
             },
-            SET_TOKEN(state, token){
+            SET_TOKEN(state, token) {
                 state.access_token = token;
             }
         },
         getters: {
+            interests: (state) => {
+                return state.interests;
+            },
             token: (state) => {
                 return state.access_token;
             },
             trips: (state) => {
                 return state.trips
             },
+            user: (state) => {
+                return state.user;
+            },
             destinations: (state) => {
                 return state.destinations
             },
             getTrip: (state) => id => {
-                return state.trips.filter(trip=>{
+                return state.trips.filter(trip => {
                     return Number(trip.trip_id) === Number(id);
                 });
             },
             getDestination: (state) => id => {
-                return state.destinations.filter(dest=>{
+                return state.destinations.filter(dest => {
                     return Number(dest.destination_id) === Number(id);
                 });
             }
         },
         actions: {
-            logout: ({commit}) => {
-              commit('APP_LOGIN', null);
+            logout: ({ commit }) => {
+                commit('SET_TOKEN', null);
             },
-            login({commit}, {token}) {
-                commit("APP_LOGIN", token);
-                localStorage.setItem("trvl-token", token);
+            createInterests: async ({state}, {selected}) => {
+                const { access_token } = state;
+
+                await axios.post(`${endpoint}/interests`, {
+                    interests: [
+                        ...selected
+                    ]
+                }, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                    console.log(response);
+                }).catch(err => {
+                    console.log(err);
+                });
             },
-            async loadTrips({commit, state}) {
-                const {access_token} = state;
+            async loadTrips({ commit, state }) {
+                const { access_token } = state;
                 await axios.get(`${endpoint}/trip`, {
                     headers: {
                         "Authorization": `Bearer ${access_token}`,
                         "Content-Type": "application/json"
                     }
-                }).then(response=>{
-                    console.log(response);
+                }).then(response => {
                     commit("SET_TRIPS", response.data);
                 });
             },
-            loadDestinations: async ({state, commit}, {tripId}) =>{
-                const {access_token} = state;
+            async loadInterests({ commit, state }) {
+                const { access_token } = state;
+                await axios.get(`${endpoint}/interests`, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                    commit("SET_INTERESTS", response.data);
+                });
+            },
+            loadDestinations: async ({ state, commit }, { tripId }) => {
+                const { access_token } = state;
                 await axios.get(`${endpoint}/dest/fk=${Number(tripId)}`, {
                     headers: {
                         "Authorization": `Bearer ${access_token}`,
                         "Content-Type": "application/json"
                     }
-                }).then(response=>{
+                }).then(response => {
                     console.log(response);
                     commit("SET_DESTINATIONS", response.data);
                 });
             },
-            createDestination: async ({state}, {data, tripId}) => {
-                const {access_token} = state;
-                const {date_from, date_to} = data;
+            createDestination: async ({ state }, { data, tripId }) => {
+                const { access_token } = state;
+                const { date_from, date_to } = data;
 
                 data.date_from = moment(date_from).utc();
                 data.date_to = moment(date_to).utc();
-                console.log(tripId);
                 await axios.post(`${endpoint}/dest`, {
                     ...data,
                     trip_id: tripId
@@ -99,29 +129,32 @@ export default (Vue) => {
                         "Authorization": `Bearer ${access_token}`,
                         "Content-Type": "application/json"
                     }
-                }).then(response=>{
+                }).then(response => {
                     console.log(response);
-                }).catch(err=>{
+                }).catch(err => {
                     console.log(err);
                 });
             },
-            auth: async ({commit,state}) => {
+            auth: async ({ commit, state }) => {
                 const token = await localStorage.getItem("trvl-token");
-                commit("SET_TOKEN",token);
+                console.log("token is ", token);
+                commit("SET_TOKEN", token);
                 return axios
-                .post("http://127.0.0.1:8000/auth/google/", {
-                  access_token: token,
-                })
-                .then((resp) => {
-                  state.user = resp.data.user;
-                });
+                    .post("http://127.0.0.1:8000/auth/google/", {
+                        access_token: token,
+                    })
+                    .then((resp) => {
+                        state.user = resp.data.user;
+                    });
             },
-            setToken: async ({commit}, {token}) => {
+            setToken: async ({ commit }, { token }) => {
                 commit("SET_TOKEN", token);
                 localStorage.setItem("trvl-token", token);
+                console.log(`SETTING TOKEN TO ${token}`);
+                return true;
             },
-            createTrip: async ({state}, {data}) => {
-                const {access_token} = state;
+            createTrip: async ({ state }, { data }) => {
+                const { access_token } = state;
 
                 await axios.post(`${endpoint}/trip`, {
                     ...data,
@@ -131,14 +164,14 @@ export default (Vue) => {
                         "Authorization": `Bearer ${access_token}`,
                         "Content-Type": "application/json"
                     }
-                }).then(response=>{
+                }).then(response => {
                     console.log(response);
-                }).catch(err=>{
+                }).catch(err => {
                     console.log(err);
                 });
             }
         },
-        
+
     });
 };
 

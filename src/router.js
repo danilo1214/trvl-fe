@@ -5,6 +5,7 @@ import Trips from "./components/Trips.vue";
 import NewDestination from "./components/NewDestination.vue";
 import Destination from "./components/Destination.vue";
 import NewTrip from "./components/NewTrip.vue";
+import Interests from "./components/Interests.vue";
 
 
 
@@ -14,6 +15,11 @@ const routes = [
         name: "login",
         path: "/login",
         component: Login
+    },
+    {
+        name: "interests",
+        path: "/interests",
+        component: Interests
     },
     {
         name: "destination",

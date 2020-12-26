@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'App',
   data () {
@@ -29,16 +29,24 @@ export default {
       logged: false
     }
   },
+  computed: {
+    ...mapGetters(["user"])
+  },
   methods: {
-    ...mapActions(["loadTrips", "auth", "setToken"]),
+    ...mapActions(["loadTrips", "auth", "setToken", "loadInterests"]),
     async init(){
       this.loaded = false;
       await this.auth().then(async ()=>{
         this.logged = true;
         await this.loadTrips();
+        await this.loadInterests();
+        const {interests} = this.user;
         if(!this.$route.name){
         this.$router.replace({name: "trips"});
-      }
+        }
+        if(!interests.length){
+          this.$router.replace({name: "interests"});
+        }
       }).catch(err=>{
         console.log(err);
         this.setToken({token: null});

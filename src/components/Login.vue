@@ -26,15 +26,18 @@ export default {
   },
   methods: {
     ...mapActions(["setToken"]),
-    onGoogleSignInSuccess(resp) {
+    async onGoogleSignInSuccess(resp) {
       const token = resp.xc.access_token;
-      this.setToken({token});
-      axios
+      await this.setToken({token});
+      await axios
         .post("http://127.0.0.1:8000/auth/google/", {
           access_token: token,
         })
         .then((resp) => {
+          console.log(resp);
           this.user = resp.data.user;
+          console.log("change route")
+          this.$router.replace({name: "trips"})
         })
         .catch((err) => {
           console.log(err.response);
