@@ -46,6 +46,10 @@ export default {
         }
         if(!interests.length){
           this.$router.replace({name: "interests"});
+          return;
+        }
+        if(!this.user.age){
+          this.$router.replace({name: "user-info"});
         }
       }).catch(err=>{
         console.log(err);

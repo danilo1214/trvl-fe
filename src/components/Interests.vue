@@ -8,6 +8,12 @@
       }}</el-checkbox>
     </el-checkbox-group>
 
+    <el-steps :space="200" :active="0" finish-status="success">
+      <el-step title="Interests"></el-step>
+      <el-step title="User Info"></el-step>
+      <el-step title="Done"></el-step>
+    </el-steps>
+
     <button type="button" class="btn btn-primary" @click="postInterests">Next</button>
 
   </div>
@@ -27,9 +33,14 @@ export default {
   },
   methods: {
     ...mapActions(["createInterests"]),
-    postInterests(){
+    async postInterests(){
       const {selected} = this;
-      this.createInterests({selected});
+      await this.createInterests({selected}).then(data=>{
+        console.log(data);
+        this.$router.replace({name: "trips"});
+      }).catch(err=>{
+        console.log(err);
+      });
     }
   }
 };

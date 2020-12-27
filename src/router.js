@@ -6,6 +6,7 @@ import NewDestination from "./components/NewDestination.vue";
 import Destination from "./components/Destination.vue";
 import NewTrip from "./components/NewTrip.vue";
 import Interests from "./components/Interests.vue";
+import UserInfoForm from "./components/UserInfoForm.vue";
 
 
 
@@ -20,6 +21,11 @@ const routes = [
         name: "interests",
         path: "/interests",
         component: Interests
+    },
+    {
+        name: "user-info",
+        path: "/user-info",
+        component: UserInfoForm
     },
     {
         name: "destination",

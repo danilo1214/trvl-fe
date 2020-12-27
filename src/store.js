@@ -63,17 +63,33 @@ export default (Vue) => {
             logout: ({ commit }) => {
                 commit('SET_TOKEN', null);
             },
-            createInterests: async ({state}, {selected}) => {
+            createInfo :({state}, {user}) => {
                 const { access_token } = state;
 
-                await axios.post(`${endpoint}/interests`, {
+                return axios.post(`${endpoint}/user/info/add`, user, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json",
+
+                    }
+                }).then(response => {
+                    console.log(response);
+                }).catch(err => {
+                    console.log(err);
+                });
+            },
+            createInterests: ({state}, {selected}) => {
+                const { access_token } = state;
+
+                return axios.post(`${endpoint}/user/interests`, {
                     interests: [
                         ...selected
                     ]
                 }, {
                     headers: {
                         "Authorization": `Bearer ${access_token}`,
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+
                     }
                 }).then(response => {
                     console.log(response);
