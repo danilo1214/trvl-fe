@@ -33,16 +33,7 @@
         >
         </el-date-picker>
       </div>
-      <label class="form-label">N coord</label>
-
-      <div class="mb-3">
-        <el-slider v-model="data.n"></el-slider>
-      </div>
-      <label class="form-label">E coord</label>
-
-      <div class="mb-3">
-        <el-slider v-model="data.e"></el-slider>
-      </div>
+      
       <label class="form-label">Budget</label>
 
       <div class="mb-3">
@@ -64,8 +55,6 @@ export default {
     return {
       data: {
         name: "",
-        n: 0,
-        e: 0,
         img: "",
         budget: 0,
         country: "",

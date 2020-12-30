@@ -9,6 +9,7 @@ export default (Vue) => {
     return new Vuex.Store({
         state: {
             token: null,
+            recommendations: {},
             trips: [],
             destinations: [],
             interests: [],
@@ -24,6 +25,9 @@ export default (Vue) => {
             },
             SET_INTERESTS(state, data) {
                 state.interests = data;
+            },
+            SET_RECOMMENDATIONS(state, data) {
+                state.recommendations = data;
             },
             CREATE_TRIP(state, value) {
                 state.trips.push(value);
@@ -47,6 +51,9 @@ export default (Vue) => {
             },
             destinations: (state) => {
                 return state.destinations
+            },
+            recommendations: (state) => {
+                return state.recommendations
             },
             getTrip: (state) => id => {
                 return state.trips.filter(trip => {
@@ -108,6 +115,18 @@ export default (Vue) => {
                     commit("SET_TRIPS", response.data);
                 });
             },
+            async loadRecommendations({ commit, state }, {destination_id}) {
+                const { access_token } = state;
+                return axios.get(`${endpoint}/recommend/destination_id=${destination_id}`, {
+                    timeout: 60000,
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                    commit("SET_RECOMMENDATIONS", response.data);
+                });
+            },
             async loadInterests({ commit, state }) {
                 const { access_token } = state;
                 await axios.get(`${endpoint}/interests`, {
@@ -117,6 +136,18 @@ export default (Vue) => {
                     }
                 }).then(response => {
                     commit("SET_INTERESTS", response.data);
+                });
+            },
+            loadDestination: async ({ state, commit }, { id }) => {
+                const { access_token } = state;
+                await axios.get(`${endpoint}/dest/pk=${Number(id)}`, {
+                    headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                   
+                    commit("SET_DESTINATIONS", [JSON.parse(response.data)]);
                 });
             },
             loadDestinations: async ({ state, commit }, { tripId }) => {
