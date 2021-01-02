@@ -77,7 +77,10 @@ export default {
     },
     submit(){
       const {data, id} = this;
-      this.createDestination({data, tripId: Number(id)});
+      this.createDestination({data, tripId: Number(id)}).then(resp=>{
+        console.log(resp);
+        this.closeModal();
+      });
     }
   },
 };

@@ -13,8 +13,8 @@
     </div>
 
     <div class="mb-3">
-      <el-checkbox label="Recieve Emails">
-        {{ user.recieve_emails }}
+      <el-checkbox label="Recieve Emails" v-model="user.recieve_emails">
+        
       </el-checkbox>
     </div>
 

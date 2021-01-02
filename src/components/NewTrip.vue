@@ -40,7 +40,10 @@ export default {
     },
     submit() {
       const { data } = this;
-      this.createTrip({data});
+      this.createTrip({data}).then(resp=>{
+        console.log(resp);
+        this.closeModal();
+      });
     },
   },
 };

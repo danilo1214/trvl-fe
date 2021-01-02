@@ -86,7 +86,6 @@ export default {
         marker
           .bindPopup(
             `<div class="card">
-            <img src="${dest.img}" class="card-img-top">
             <div class="card-body">
               <h5 class="card-title">${dest.name}</h5>
               <p class="card-text">From: ${dateFrom}</p>

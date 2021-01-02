@@ -166,8 +166,8 @@ export default (Vue) => {
                 const { access_token } = state;
                 const { date_from, date_to } = data;
 
-                data.date_from = moment(date_from).utc();
-                data.date_to = moment(date_to).utc();
+                data.date_from = moment(date_from).format("YYYY-MM-DD HH:mm:ss");
+                data.date_to = moment(date_to).format("YYYY-MM-DD HH:mm:ss");
                 await axios.post(`${endpoint}/dest`, {
                     ...data,
                     trip_id: tripId
@@ -204,8 +204,7 @@ export default (Vue) => {
                 const { access_token } = state;
 
                 await axios.post(`${endpoint}/trip`, {
-                    ...data,
-                    user_id: 4
+                    ...data
                 }, {
                     headers: {
                         "Authorization": `Bearer ${access_token}`,
