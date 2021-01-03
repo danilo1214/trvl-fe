@@ -52,7 +52,7 @@ export default {
           this.$router.replace({name: "user-info"});
         }
       }).catch(err=>{
-        console.log(err);
+        console.log(err.response);
         this.setToken({token: null});
         this.$router.replace({name: "login"});
         this.logged = false;

@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-5">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-      <div v-for="trip in trips" :key="trip.id" class="card p-2 m-5 col" style="width: 18rem">
+    <div class="d-flex">
+      <div v-for="trip in trips" :key="trip.id" class="card p-2 m-5" style="width: 18rem">
       <div class="card-body">
         <h5 class="card-title">{{ trip.name }}</h5>
         <p class="card-text">{{ trip.description }}</p>
