@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-5">
     <div class="d-flex">
-      <div v-for="trip in trips" :key="trip.id" class="card p-2 m-5" style="width: 18rem">
+      <div v-for="trip in trips" :key="trip.id" class="card p-2 m-5 shadow" style="width: 18rem">
       <div class="card-body">
         <h5 class="card-title">{{ trip.name }}</h5>
         <p class="card-text">{{ trip.description }}</p>
@@ -13,6 +13,7 @@
 
     <el-button
         id="newTripButton"
+        class="shadow"
         type="primary"
         circle
         small

@@ -2,7 +2,10 @@
   <div class="container" v-loading="!loaded">
     <template v-if="loaded">
       <div class="mt-5 d-flex">
-        <div class="card m-5 shadow-lg col" style="max-width: 348px; min-width: 348px; max-height: 500px">
+        <div
+          class="card m-5 shadow-lg col p-0"
+          style="max-width: 348px; min-width: 348px; max-height: 500px"
+        >
           <img :src="destination.image" alt="..." />
           <div class="card-body">
             <h5 class="card-title capitalize">
@@ -29,7 +32,7 @@
         <div class="row justify-content-around col">
           <div
             v-for="recommendation in recommendationsList"
-            class="card col-4 shadow m-5"
+            class="card col-4 shadow m-5 p-0"
             style="max-width: 450px"
             :key="recommendation.Title"
           >
@@ -41,14 +44,45 @@
             <div class="card-body">
               <p class="card-text">Time: {{ recommendation.Time }}</p>
 
-            <p class="card-text">Location: {{ recommendation.Location }}</p>
+              <p class="card-text">Location: {{ recommendation.Location }}</p>
 
-            <p class="card-text text-truncate">Description: ${{ recommendation.Description }}</p>
+              <p class="card-text text-truncate">
+                Description: {{ recommendation.Description }}
+              </p>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setRecommendation(recommendation)"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                More...
+              </button>
             </div>
           </div>
         </div>
       </div>
     </template>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{reccomendationText}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 </template>
 
@@ -59,6 +93,8 @@ export default {
   data() {
     return {
       loaded: false,
+      reccomendationText: "",
+      title: ""
     };
   },
   computed: {
@@ -79,6 +115,11 @@ export default {
   },
   methods: {
     ...mapActions(["loadRecommendations", "loadDestination"]),
+    setRecommendation(r){
+      this.reccomendationText = r.Description;
+      this.title = r.Title;
+
+    },
     async load() {
       const { id } = this;
       this.loaded = false;

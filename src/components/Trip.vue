@@ -4,6 +4,7 @@
      
     </div>
  <el-button
+        class="shadow"
         id="newDestinationButton"
         type="primary"
         circle
