@@ -30,7 +30,7 @@ export default {
       const token = resp.xc.access_token;
       await this.setToken({token});
       await axios
-        .post("http://127.0.0.1:8000/auth/google/", {
+        .post("https://travel-api-tpo.herokuapp.com/auth/google/", {
           access_token: token,
         })
         .then((resp) => {

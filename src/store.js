@@ -2,7 +2,7 @@ import axios from "axios";
 import Vuex from "vuex";
 import moment from "moment";
 
-const endpoint = "http://127.0.0.1:8000/api"
+const endpoint = "https://travel-api-tpo.herokuapp.com/api"
 export default (Vue) => {
     Vue.use(Vuex);
 
@@ -187,7 +187,7 @@ export default (Vue) => {
                 console.log("token is ", token);
                 commit("SET_TOKEN", token);
                 return axios
-                    .post("http://127.0.0.1:8000/auth/google/", {
+                    .post("https://travel-api-tpo.herokuapp.com/auth/google/", {
                         access_token: token,
                     })
                     .then((resp) => {
