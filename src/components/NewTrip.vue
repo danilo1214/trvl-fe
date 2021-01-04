@@ -51,7 +51,7 @@ export default {
 
 <style>
 #newTripButton {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 20px;
   padding: 10px;
